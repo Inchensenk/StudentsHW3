@@ -13,7 +13,10 @@ int main()
 	//Group gr("<БВ-111>", Group::ReadFile(path1), Group::ReadFile(path2), Group::ReadFile(path3));
 
 	Group gr("<БВ-111>", Group::ReadFile("Student.txt"), Group::ReadFile("Subject.txt"), Group::ReadFile("score table.txt"));
-	gr.scoreTable();
-	gr.avgScore();
+	//gr.scoreTable();
+	//gr.avgScoreStud();
+	//gr.avgScoreSubj();
+	//gr.avgScoreGroup();
+	gr.scoreTableMinMax();
 }
 

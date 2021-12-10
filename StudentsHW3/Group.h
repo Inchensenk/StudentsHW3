@@ -37,7 +37,7 @@ public:
 		else cout << "Файл не открылся!" << endl;
 		return data;
 	}
-
+	//функция которая считает колличество вхождений символа в строке
 	static int Count(string str, char sep)
 	{
 		int count = 0;
@@ -53,7 +53,7 @@ public:
 				return count;
 		}
 	}
-
+	//делит исходную строку на подстроки и формирует массив подстрок по заданному разделителю
 	static string* GetArray(string data, int numrow, char sep)
 	{
 		string* str = new string[numrow]{};
@@ -71,7 +71,7 @@ public:
 
 		return str;
 	}
-
+	//перевод из char в int 
 	static int CharToInt(char c)
 	{
 		if (c == (char)48) return 0;
@@ -85,18 +85,20 @@ public:
 		if (c == (char)56) return 8;
 		if (c == (char)57) return 9;
 	}
-
+	//таблица оценок студентов по предметам
 	void scoreTable()
 	{
 		cout << "Группа: " + nameGr << endl;
 
-		int sizeSubj = sizeof(subjList[0]) / sizeof(subjList);
+		int sizeSubj = sizeof(subjList[0]) / sizeof(subjList);//sizeSubj длинна массива subjList
 		cout << "\t\t\t\t";
 		for (int i = 0; i < sizeSubj; i++)
-		{
+		{   //если размер итой строки меньше либо равен 8
 			if (subjList[i].size() >= 8)
+				//то ставим одинарную табуляцию
 				cout << subjList[i]<<"\t";
 			else
+				//иначе двойную
 				cout << subjList[i] << "\t\t";
 		}
 		cout << endl;
@@ -115,13 +117,13 @@ public:
 			cout << endl;
 		}
 	}
-	
-	void avgScore()
+	//функция для вывода таблицы средних оценок 
+	void avgScoreStud()
 	{
 		cout << "Группа: " + nameGr << endl;
 		int sizeStud = sizeof(studList[0]) / sizeof(studList);
 		int sizeScore = (sizeof(scoreList[0]) / sizeof(scoreList)) * 2 - 1;// размер увеличивается в 2 раза так как между оценками в строке есть пробелы и -1 потому что у последнего символа в последней строке его нет
-
+		int sizeScoreOrig = sizeof(scoreList[0]) / sizeof(scoreList);
 		for (int i = 0; i < sizeStud; i++)
 		{
 			float avg = 0;
@@ -132,11 +134,146 @@ public:
 			
 			for (int j = 0; j < sizeScore; j++)
 			{
+				//если символ не чеnysq мы его считываем, чтобы пропускать пробелы
 				if (j % 2 == 0)
 					avg += CharToInt(scoreList[i][j]);
 			}
-			cout << avg / (sizeof(scoreList[0]) / sizeof(scoreList)) << endl;
+			//вывод средней оценки
+			cout << avg / sizeScoreOrig << endl;
 		}
 	}
+	//функция для вывода средней оценки по предметам
+	void avgScoreSubj()
+	{
+		cout << "Предметы: " << endl;
+		int sizeSubj = sizeof(subjList[0]) / sizeof(subjList);
+		for (int i = 0; i < sizeSubj; i++)
+		{
+			if (subjList[i].size() >= 8)
+				//то ставим одинарную табуляцию
+				cout << subjList[i] << "\t";
+			else
+				//иначе двойную
+				cout << subjList[i] << "\t\t";
+		}
+		cout << endl;
+		//размер с пробелом
+		int sizeScoreExtend = (sizeof(scoreList[0]) / sizeof(scoreList)) * 2 - 1;// размер увеличивается в 2 раза так как между оценками в строке есть пробелы и -1 потому что у последнего символа в последней строке его нет
+		//размер без разделителя (пробела)
+		int sizeScoreOrig = sizeof(scoreList[0]) / sizeof(scoreList);
+
+		for (int i = 0; i < sizeScoreExtend; i++)
+		{
+			float avg = 0;
+			for (int j = 0; j < sizeScoreOrig; j++)
+			{
+				//если символ не четный мы его считываем, чтобы пропускать пробелы
+				if (i % 2 == 0)
+					//складываем оценки по определенному предмету
+					avg += CharToInt(scoreList[j][i]);
+			}
+			
+			if (i % 2 == 0)
+			//вывод средней оценки
+			cout << avg / sizeScoreOrig << "\t\t";
+		}
+		
+	}
+
+	void avgScoreGroup()
+	{
+		cout << "Группа: " + nameGr << endl;
+		//колличесво элементов массива студентов
+		int sizeStud = sizeof(studList[0]) / sizeof(studList);
+		//размер с пробелами
+		int sizeScoreExtend = (sizeof(scoreList[0]) / sizeof(scoreList)) * 2 - 1;// размер увеличивается в 2 раза так как между оценками в строке есть пробелы и -1 потому что у последнего символа в последней строке его нет
+		//размер без разделителя (пробела)
+		int sizeScoreOrig = sizeof(scoreList[0]) / sizeof(scoreList);
+		float avgGroup=0;
+		for (int i = 0; i < sizeStud; i++)
+		{
+			float avg = 0;
+
+			for (int j = 0; j < sizeScoreExtend; j++)
+			{
+				//если символ не чеnysq мы его считываем, чтобы пропускать пробелы
+				if (j % 2 == 0)
+					avg += CharToInt(scoreList[i][j]);
+			}
+			////вычесление средней оценки конкретного студента и суммирование со всеми средними оценками студентом
+			avgGroup+= avg / sizeScoreOrig;
+
+		}
+		//вычесление средней оценки группы
+		avgGroup /= sizeStud;
+		cout << "Средний балл группы " + nameGr + " : "<< avgGroup << endl;
+	}
+
+	void scoreTableMinMax()
+	{
+		cout << "Группа: " + nameGr << endl;
+
+		int sizeSubj = sizeof(subjList[0]) / sizeof(subjList);//sizeSubj длинна массива subjList
+		cout << "\t\t\t\t";
+		for (int i = 0; i < sizeSubj; i++)
+		{   //если размер итой строки меньше либо равен 8
+			if (subjList[i].size() >= 8)
+				//то ставим одинарную табуляцию
+				cout << subjList[i] << "\t";
+			else
+				//иначе двойную
+				cout << subjList[i] << "\t\t";
+		}
+		cout << endl;
+
+		int sizeStud = sizeof(studList[0]) / sizeof(studList);
+		//размер с пробелом
+		int sizeScoreExtend = (sizeof(scoreList[0]) / sizeof(scoreList)) * 2 - 1;// размер увеличивается в 2 раза так как между оценками в строке есть пробелы и -1 потому что у последнего символа в последней строке его нет
+		//размер без разделителя (пробела)
+		int sizeScoreOrig = sizeof(scoreList[0]) / sizeof(scoreList);
+
+		for (int i = 0; i < sizeStud; i++)
+		{
+			int* max = new int[sizeScoreOrig];
+			int* min = new int[sizeScoreOrig];
+
+			if (studList[i].size() >= 22)
+				cout << studList[i] << "\t";
+			else
+				cout << studList[i] << "\t\t";
+
+			for (int k = 0; k < sizeScoreExtend; k++)
+			{
+				max[i] = CharToInt(scoreList[i][0]);
+				min[i] = CharToInt(scoreList[i][0]);
+
+				//если символ не четный мы его считываем, чтобы пропускать пробелы
+				if (k % 2 == 0)
+				{
+					if (CharToInt(scoreList[i][k]) >= max[i])
+						max[i] = CharToInt(scoreList[i][k]);
+					if (CharToInt(scoreList[i][k]) <= min[i])
+						min[i] = CharToInt(scoreList[i][k]);
+				}
+
+				//cout << min << endl;
+			}
+
+			for (int e = 0; e < sizeScoreExtend; e++)
+			{
+				if (e % 2 == 0)
+				{
+					if (CharToInt(scoreList[i][e]) == max[i])
+						cout << scoreList[i][e] << "-max" << "\t\t";
+					else if (CharToInt(scoreList[i][e]) == min[i])
+						cout << scoreList[i][e] << "-min" << "\t\t";
+					else
+						cout << scoreList[i][e] << "\t\t";
+				}
+			}
+			cout << endl;
+		}
+	}
+
 };
 

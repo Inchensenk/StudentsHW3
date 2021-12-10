@@ -8,13 +8,13 @@ protected:
 	string* studList;//список студентов
 	string* scoreList;//список оценок
 public:
-	//конструктор
+	//конструктор для массива строк
 	Student(string* studList, string* scoreList)
 	{
 		this->studList = studList;
 		this->scoreList = scoreList;
 	}
-
+	//конструктор пинимающий строки из файла
 	Student(string dataStud, string dataScore)
 	{
 		int size = 0;
@@ -29,38 +29,39 @@ public:
 		delete[] studList;
 		delete[] scoreList;
 	}
+	//функция считывающая текст из файла и возвращает его в строковую переменную
 	static string ReadFile(string namefile)
 	{
 		ifstream f;
 		char buf;
 		string data = "";
 		f.open(namefile);
-		if (f.is_open())
+		if (f.is_open())//если файл открылся
 		{
 			while (true)
 			{
-				f.get(buf);
-				if (!f.eof())
+				f.get(buf);//посимвольное считывание из файла в переменную buf
+				if (!f.eof())//пока файл не закончился считываем данные с файла
 					data += buf;
 				else
 					break;
 			}
-			f.close();
+			f.close();//закрытие потока чтения
 		}
 		else cout << "Файл не открылся!" << endl;
 		return data;
 	}
-
+	//функция которая считает колличество вхождений символа в строке
 	static int Count(string str, char sep)
 	{
 		int count = 0;
 		while (true)
 		{
-			int index = str.find(sep);
+			int index = str.find(sep);//find() ищет первое вхождение символа в строку с начала строки
 			if (index != -1)
 			{
 				count++;
-				str.replace(index, 1, "");
+				str.replace(index, 1, "");////replace() заменяет одни символы на другие символы, затирание символов на пустую строку
 			}
 			else
 				return count;
@@ -69,9 +70,9 @@ public:
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="data"></param>
+	/// <param name="data">исходная строка которую будем делить на подстроки</param>
 	/// <param name="numrow">колличество строк</param>
-	/// <param name="sep"></param>
+	/// <param name="sep">разделительный символ</param>
 	/// <returns></returns>
 	static string* GetArray(string data, int numrow, char sep)
 	{
@@ -82,9 +83,9 @@ public:
 		{
 			end = data.find(sep);
 			if (end == -1)
-				end = data.find('\0');
-			str[i] = data.substr(beg, end);
-			data.replace(beg, end + 1, "");
+				end = data.find('\0');//find() ищет первое вхождение символа в строку с начала строки
+			str[i] = data.substr(beg, end);//substr() возвращает подстроку из строки по индексу начала beg и индексу конца end
+			data.replace(beg, end + 1, "");//replace() заменяет одни символы на другие символы, затирание символов на пустую строку
 			beg = 0;
 		}
 
